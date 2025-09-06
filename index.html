@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Partners M&L – Flexible Personalvermittlung</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-primary: #7456F1;
+      --color-primary-dark: #593ec1;
+      --color-dark-blue: #102136;
+      --color-dark-blue-transparent: rgba(16, 33, 54, 0.7);
+      --color-white: #fff;
+      --header-height: 80px;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; width: 100vw; overflow-x: hidden; }
+    body { font-family: 'Poppins', sans-serif; background-color: var(--color-dark-blue); color: var(--color-dark-blue); overflow-x: hidden; }
+    body.nav-open { overflow-y: hidden; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* Header */
+    .header { position: sticky; top: 0; left: 0; width: 100%; z-index: 1000; background-color: var(--color-dark-blue); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; width: 95%; margin: 0 auto; height: var(--header-height); padding: 0 1rem; }
+    .logo img { height: 60px; display: block; transition: transform 0.3s ease; }
+    .logo a:hover img { transform: scale(1.05); }
+    .menu-toggle { display: none; background: none; border: none; cursor: pointer; z-index: 1001; padding: 10px; }
+    .hamburger { display: block; position: relative; width: 24px; height: 2px; background-color: var(--color-white); transition: background-color 0.2s ease; }
+    .hamburger::before, .hamburger::after { content: ''; position: absolute; left: 0; width: 24px; height: 2px; background-color: var(--color-white); transition: transform 0.3s ease-in-out, top 0.3s ease-in-out; }
+    .hamburger::before { top: -8px; } .hamburger::after { top: 8px; }
+    body.nav-open .hamburger { background-color: transparent; }
+    body.nav-open .hamburger::before { transform: rotate(45deg); top: 0; }
+    body.nav-open .hamburger::after { transform: rotate(-45deg); top: 0; }
+    .nav { display: flex; align-items: center; }
+    .nav-list { display: flex; gap: 2.5rem; }
+    .nav-item { position: relative; }
+    .nav-item > a { font-size: 1.1rem; font-weight: 600; color: var(--color-white); padding: 0.5rem 0; display: inline-block; transition: transform 0.3s, color 0.3s; }
+    .nav-item > a:hover { transform: translateY(-3px); color: var(--color-primary); }
+    .submenu { display: none; position: absolute; top: 100%; left: 0; background-color: var(--color-dark-blue); border-radius: 4px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); min-width: 200px; padding: 0.75rem 0; text-align: left; z-index: 1001; }
+    .nav-item:hover .submenu { display: block; }
+    .submenu li { padding: 0.25rem 0; }
+    .submenu li a { font-size: 1rem; color: var(--color-white); padding: 0.75rem 1.5rem; display: block; transition: background-color 0.3s, color 0.3s; }
+    .submenu li a:hover { background-color: rgba(255,255,255,0.1); color: var(--color-primary); }
+
+    /* Hero */
+    .hero { position: relative; height: calc(100vh - var(--header-height)); min-height: 400px; text-align: center; overflow: hidden; }
+    .hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+    .hero::before { content: ''; position: absolute; inset: 0; background-color: rgba(0,0,0,0.4); z-index: -1; }
+    .hero-content { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); max-width: 800px; padding: 1.5rem; background-color: var(--color-dark-blue-transparent); backdrop-filter: blur(10px); border: 2px solid var(--color-white); border-top-left-radius: 12px; border-top-right-radius: 12px; border-bottom: none; color: var(--color-white); z-index: 1; width: 100%; max-width: none; text-align: center; }
+    .hero-content h1, .hero-content h2 { background-color: transparent; color: var(--color-white); display: inline-block; padding: 8px 16px; border: none; margin: 0.25rem auto; text-align: center; font-size: clamp(1.8rem, 6vw, 3.5rem); line-height: 1.2; box-shadow: none; }
+    .hero-content h1 { font-weight: 400; font-size: clamp(1.6rem, 5vw, 2.5rem); }
+    .hero-content h2 { font-weight: 700; text-transform: uppercase; margin: 0.5rem 0; }
+    .hero-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 1rem; }
+    .btn { display: inline-block; padding: 0.9rem 2rem; border-radius: 4px; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; border: 2px solid transparent; }
+    .btn-primary { background-color: var(--color-primary); border-color: var(--color-primary); color: var(--color-white); }
+    .btn-primary:hover { background-color: var(--color-primary-dark); border-color: var(--color-primary-dark); transform: translateY(-2px); }
+    .btn-secondary { background-color: transparent; border-color: var(--color-white); color: var(--color-white); }
+    .btn-secondary:hover { background-color: rgba(255,255,255,0.1); transform: translateY(-2px); }
+
+    /* Services section */
+    .inspiration-section { max-width: 1100px; margin: auto; padding: 3.5rem 1rem 2.5rem; text-align: center; background: linear-gradient(90deg, #e3f2fd 0%, #f9f9f9 100%); }
+    .inspiration-content h2 { font-size: 2.3rem; color: #0d47a1; margin-bottom: 1.5rem; letter-spacing: -0.5px; line-height: 1.2; }
+    .inspiration-content .subtitle { font-size: 1.1rem; color: #333; margin-bottom: 2.5rem; line-height: 1.7; }
+    .dienstleistungen-cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 2rem; justify-items: center; }
+    .dienst-card { background: #fff; border-radius: 14px; box-shadow: 0 2px 8px rgba(13,71,161,0.06); border: 1px solid rgba(13,71,161,0.1); padding: 1.8rem 1.2rem; text-align: center; transition: box-shadow 0.2s ease, transform 0.18s ease; position: relative; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; cursor: pointer; min-height: 240px; width: 100%; max-width: 300px; }
+    .dienst-card:hover, .dienst-card:focus { box-shadow: 0 4px 12px rgba(13,71,161,0.15); transform: translateY(-3px) scale(1.02); color: #0d47a1; }
+    .dienst-icon { font-size: 2.2rem; margin-bottom: 0.7rem; display: block; color: #ff6f00; transition: color 0.15s; }
+    .dienst-card:hover .dienst-icon { color: #0d47a1; }
+    .dienst-card h3 { font-size: 1.2rem; color: #0d47a1; margin-bottom: 0.8rem; margin-top: 0; font-weight: 700; }
+    .dienst-card p { color: #555; font-size: 1rem; margin: 0; line-height: 1.5; }
+    .dienst-card .default-text { transition: opacity 0.3s ease; }
+    .dienst-card .hover-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #0d47a1; background-size: cover; background-position: center; background-blend-mode: overlay; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; padding: 1rem; opacity: 0; height: 0; transition: height 0.5s ease, opacity 0.3s ease; }
+    .dienst-card:hover .default-text { opacity: 0; }
+    .dienst-card:hover .hover-content { opacity: 1; height: 100%; }
+
+    /* Industries */
+    .industries-section { padding: 80px 20px; max-width: 1300px; margin: 0 auto; font-family: 'Poppins', sans-serif; background: linear-gradient(to bottom, #f9f9fb 0%, #ffffff 100%); }
+    .industries-intro { text-align: center; margin-bottom: 60px; padding: 0 20px; }
+    .industries-intro h2 { font-size: 2.4rem; color: #0d47a1; margin-bottom: 20px; font-weight: 700; }
+    .industries-intro p { font-size: 1.15rem; line-height: 1.7; color: #3a3a3a; max-width: 860px; margin: 0 auto; }
+    .industries-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; padding: 0 20px; }
+    .industry-card { background: #fff; border-radius: 16px; padding: 0; box-shadow: 0 8px 30px rgba(13,71,161,0.08); transition: all 0.4s cubic-bezier(0.25,0.8,0.25,1); border: 1px solid rgba(13,71,161,0.1); position: relative; overflow: hidden; height: 320px; }
+    .default-content { padding: 32px; transition: all 0.3s ease; height: 100%; display: flex; flex-direction: column; }
+    .hover-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; background-color:#0d47a1; background-blend-mode: overlay; color: white; opacity: 0; transition: opacity 0.4s ease; display: flex; align-items: center; justify-content: center; text-align: center; padding: 30px; }
+    .hover-inner { transform: translateY(20px); transition: transform 0.4s ease; }
+    .industry-card:hover .default-content { opacity: 0; }
+    .industry-card:hover .hover-content { opacity: 1; }
+    .industry-card:hover .hover-inner { transform: translateY(0); }
+    .card-icon { font-size: 2.5rem; margin-bottom: 20px; display: inline-block; }
+    .industry-card h3 { font-size: 1.5rem; color: #0d47a1; margin-bottom: 16px; font-weight: 700; }
+    .industry-card p { font-size: 1.05rem; line-height: 1.6; color: #444; margin-bottom: 24px; }
+    .learn-more-btn { display: inline-block; padding: 12px 24px; background-color: white; color: #0d47a1; border-radius: 30px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; border: 2px solid white; }
+    .learn-more-btn:hover { background-color: transparent; color: white; }
+
+    /* Kontakt */
+    .kontakt-section { background: #fff; padding: 3.5rem 0 3rem 0; }
+    .kontakt-container { display: flex; justify-content: center; align-items: flex-start; gap: 3rem; max-width: 1200px; margin: auto; padding: 0 1.5rem; flex-wrap: wrap; }
+    .standort-info { flex: 1 1 340px; min-width: 290px; max-width: 470px; background: #f8fbff; border-radius: 14px; box-shadow: 0 2px 10px rgba(13,71,161,0.07); padding: 2.1rem 1.4rem 1.7rem; }
+    .standort-info h3 { color: #0d47a1; margin-top: 0; display: flex; align-items: center; font-size: 1.23rem; font-weight: 800; }
+    .standort-icon { font-size: 1.4em; margin-right: 0.7em; }
+    .subtitle { font-size: 1.03rem; color: #333; margin-bottom: 1.1em; }
+    .standort-mission { display: block; font-size: 0.98em; color: #607d8b; margin-top: 0.6em; }
+    .info-divider { border: none; border-top: 1.5px solid #e0e7ef; margin: 1em 0 1.2em 0; }
+    .address-block { display: flex; align-items: center; font-size: 1.06em; margin-bottom: 0.7em; }
+    .address-icon { font-size: 1.35em; color: #ff6f00; margin-right: 0.6em; }
+    .map-block iframe { width: 100%; height: 180px; border: 0; border-radius: 8px; margin-bottom: 1em; }
+    .contact-details { margin-top: 0.3em; }
+    .contact-details div { font-size: 1.01em; margin: 0.3em 0; display: flex; align-items: center; gap: 0.5em; }
+    .contact-icon { font-size: 1.18em; color: #0d47a1; }
+    .kontakt-form-card { flex: 1 1 350px; min-width: 295px; max-width: 400px; background: #fff; border-radius: 14px; box-shadow: 0 2px 14px rgba(255,111,0,0.08); padding: 2.2rem 1.4rem 1.7rem; margin-bottom: 1.2rem; display: flex; flex-direction: column; align-items: stretch; }
+    .form-title { color: #ff6f00; font-weight: 700; font-size: 1.18rem; margin: 0 0 0.4em; display: flex; align-items: center; gap: 0.5em; }
+    .form-icon { font-size: 1.22em; }
+    .form-subtitle { color: #333; margin-bottom: 1.2em; font-size: 1.06em; }
+    .kontakt-form { display: flex; flex-direction: column; gap: 0.78em; }
+    .kontakt-form input, .kontakt-form textarea { font-family: inherit; font-size: 1em; border-radius: 5px; border: 1.2px solid #cfd8dc; padding: 0.64em 0.8em; outline: none; background: #f7f9fc; transition: border 0.17s; }
+    .kontakt-form input:focus, .kontakt-form textarea:focus { border: 1.6px solid #0d47a1; }
+    .cta-button { background: #ff6f00; color: #fff; border: none; border-radius: 5px; padding: 0.85em 1.5em; margin-top: 0.4em; font-size: 1.09em; font-weight: 700; transition: background 0.18s; cursor: pointer; }
+    .cta-button:hover { background: #e65100; }
+    .form-hint { color: #0d47a1; font-size: 0.99em; margin-top: 1.1em; text-align: left; }
+
+    /* Footer */
+    .main-footer { background: #243161; color: #fff; font-size: 1.04em; margin-top: 0; padding: 0; }
+    .footer-container { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; max-width: 1200px; margin: auto; padding: 2.5rem 2rem 1.2rem; flex-wrap: wrap; }
+    .footer-col { flex: 1 1 230px; min-width: 230px; }
+    .footer-title { color: #ff6f80; font-size: 1.13em; margin-bottom: 0.85em; margin-top: 0; letter-spacing: 1px; font-weight: 700; }
+    .footer-subtitle { font-size: 0.98em; color: #fff; font-weight: 600; margin-bottom: 1em; display: block; }
+    .footer-social { display: flex; align-items: center; gap: 1.1em; margin-top: 0.5em; }
+    .footer-social-link { display: flex; align-items: center; gap: 0.5em; color: #fff; font-weight: 500; font-size: 0.99em; text-decoration: none; transition: color 0.18s; }
+    .footer-social-link:hover { color: #ff6f80; }
+    .footer-links { list-style: none; margin: 0; padding: 0; }
+    .footer-links li { margin-bottom: 0.5em; }
+    .footer-links a { color: #fff; text-decoration: none; font-size: 0.97em; transition: color 0.16s; border-bottom: 1px solid transparent; }
+    .footer-links a:hover { color: #ff6f80; border-bottom: 1px solid #ff6f80; }
+    .footer-bottom { width: 100%; padding: 0.9em 0 0.7em; text-align: center; font-size: 0.97em; border-top: 1.5px solid #1b2450; background: #243161; display: flex; flex-direction: column; gap: 0.3em; }
+
+    /* Responsive */
+    @media (max-width: 1023px) {
+      .menu-toggle { display: block; }
+      .nav { position: fixed; top: 0; right: 0; width: 100%; height: 100vh; background-color: var(--color-dark-blue); transform: translateX(100%); transition: transform 0.4s ease-in-out; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+      body.nav-open .nav { transform: translateX(0); }
+      .nav-list { flex-direction: column; gap: 1.5rem; }
+      .nav-item > a { font-size: 1.5rem; }
+      .submenu { position: static; width: 100%; background-color: transparent; box-shadow: none; border: none; padding: 0; }
+      .nav-item:hover .submenu { display: flex; flex-direction: column; align-items: center; }
+      .submenu li a { padding: 0.75rem; }
+      .hero { height: calc(70vh - var(--header-height)); }
+      .hero-content { position: absolute; bottom: 0; left: 0; transform: none; padding: 1rem; width: 100%; border-radius: 0; border-top: 2px solid var(--color-white); border-left: none; border-right: none; }
+      .hero-content h1, .hero-content h2 { font-size: clamp(1.4rem, 6vw, 2.8rem); padding: 8px 12px; }
+      .hero-content h1 { font-size: clamp(1.2rem, 5vw, 2rem); }
+      .hero-buttons { gap: 0.8rem; margin-top: 1rem; flex-direction: column; }
+      .btn { font-size: 0.9rem; padding: 0.8rem 1.2rem; min-width: 100%; }
+      .inspiration-section { padding: 2rem 1rem 1.5rem; }
+      .dienstleistungen-cards-grid { grid-template-columns: 1fr 1fr; }
+      .industries-grid { grid-template-columns: 1fr; gap: 25px; padding: 0; }
+      .industry-card { height: 300px; }
+    }
+    @media (max-width: 600px) {
+      .dienstleistungen-cards-grid { grid-template-columns: 1fr; }
+      .standort-info, .kontakt-form-card { padding: 1.2rem 0.4rem; }
+      .map-block iframe { height: 140px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-container">
+      <div class="logo">
+        <a href="/">
+          <img src="https://partners-ml.de/wp-content/uploads/2025/06/logo1.png" alt="Partners M&L Logo">
+        </a>
+      </div>
+      <nav class="nav" id="main-nav">
+        <ul class="nav-list">
+          <li class="nav-item has-submenu">
+            <a href="/fur-unternehmen">Für Unternehmen</a>
+            <ul class="submenu">
+              <li><a href="/personalvermittlungsmodelle/">Leistungsübersicht</a></li>
+              <li><a href="/schwerpunkte-taetigkeitsfelder/">Branchen</a></li>
+            </ul>
+          </li>
+          <li class="nav-item has-submenu">
+            <a href="/fur-bewerber">Für Bewerber</a>
+            <ul class="submenu">
+              <li><a href="/stellenangebote-2/">Stellenangebote</a></li>
+              <li><a href="/services/">Karriere</a></li>
+            </ul>
+          </li>
+          <li class="nav-item has-submenu">
+            <a href="/uber-uns">Über uns</a>
+            <ul class="submenu">
+              <li><a href="/team-2/">Team</a></li>
+              <li><a href="/ueber-uns/">Geschichte</a></li>
+              <li><a href="/zertifikate/">Zertifikate</a></li>
+            </ul>
+          </li>
+          <li class="nav-item has-submenu">
+            <a href="/rechtliches">Rechtliches</a>
+            <ul class="submenu">
+              <li><a href="/privacy-policy/">Datenschutz</a></li>
+              <li><a href="/impressum/">Impressum</a></li>
+              <li><a href="/agb/">AGB</a></li>
+              <li><a href="/cookie-richtlinie-eu/">Cookie‑Richtlinie</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <button class="menu-toggle" aria-label="Menü öffnen/schließen" aria-controls="main-nav" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="https://partners-ml.de/wp-content/uploads/2025/07/Kopie-von-Kopie-von-LM-Homepage-Vid-1.mp4" type="video/mp4">
+        <img src="https://partners-ml.de/wp-content/uploads/2025/07/hero-fallback.jpg" alt="Fallback Image">
+      </video>
+      <div class="hero-content">
+        <h1 id="hero-title">Partners M&L, spol. s r. o.</h1>
+        <h2>Ihr Partner für flexible Personalvermittlung</h2>
+        <div class="hero-buttons">
+          <a href="https://partners-ml.de/contact/" class="btn btn-primary">Personal bestellen</a>
+          <a href="https://partners-ml.de/kostenlose-beratung/" class="btn btn-secondary">Kostenlose Beratung</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="inspiration-section">
+      <div class="inspiration-content">
+        <h2>Saubere Personaldienstleistung auf Augenhöhe</h2>
+        <p class="subtitle">
+          Willkommen bei Partners M&L – Ihr moderner Personaldienstleister für maßgeschneiderte Fachkräftevermittlung.<br>
+          Gemeinsam für Ihren Erfolg!
+        </p>
+        <div class="dienstleistungen-cards-grid">
+          <div class="dienst-card">
+            <span class="dienst-icon" role="img" aria-label="Partnerschaft">🤝</span>
+            <div class="default-text">
+              <h3>Arbeitnehmerüberlassung (Zeitarbeit)</h3>
+              <p>Flexible und sichere Überlassung qualifizierter Mitarbeiter.</p>
+            </div>
+            <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=220&q=80')">
+              Flexible Personallösungen für Ihren Bedarf
+            </div>
+          </div>
+          <div class="dienst-card">
+            <span class="dienst-icon" role="img" aria-label="Suche">🔍</span>
+            <div class="default-text">
+              <h3>Personalvermittlung</h3>
+              <p>Langfristige Vermittlung der besten Fachkräfte.</p>
+            </div>
+            <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1573497491765-dccce02b29df?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=220&q=80')">
+              Die passenden Fachkräfte für Ihr Team
+            </div>
+          </div>
+          <div class="dienst-card">
+            <span class="dienst-icon" role="img" aria-label="Gebäude">🏢</span>
+            <div class="default-text">
+              <h3>Onsite & Nearsite Konzepte</h3>
+              <p>Persönliche Betreuung und Koordination vor Ort.</p>
+            </div>
+            <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=220&q=80')">
+              Vor-Ort-Service für reibungslose Abläufe
+            </div>
+          </div>
+          <div class="dienst-card">
+            <span class="dienst-icon" role="img" aria-label="Austausch">🔄</span>
+            <div class="default-text">
+              <h3>Temp to Perm Modelle</h3>
+              <p>Unkomplizierter Übergang von Zeitarbeit in Festanstellung.</p>
+            </div>
+            <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=220&q=80')">
+              Vom temporären zum festen Mitarbeiter
+            </div>
+          </div>
+          <div class="dienst-card">
+            <span class="dienst-icon" role="img" aria-label="Idee">💡</span>
+            <div class="default-text">
+              <h3>Recruitment Process Outsourcing (RPO)</h3>
+              <p>Auslagerung Ihres Recruitings an erfahrene Profis.</p>
+            </div>
+            <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=220&q=80')">
+              Professionelles Recruiting für Ihr Unternehmen
+            </div>
+          </div>
+          <div class="dienst-card">
+            <span class="dienst-icon" role="img" aria-label="Dokument">📄</span>
+            <div class="default-text">
+              <h3>Werkvertrag</h3>
+              <p>Selbstständige Fachkräfte aus der Slowakei für projektbezogene Werkverträge. Flexibel & rechtssicher für Ihr Unternehmen.</p>
+            </div>
+            <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=220&q=80')">
+              Internationale Fachkräfte für Projekte
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="industries-section">
+      <div class="industries-intro">
+        <h2>Unsere Fachbereiche</h2>
+        <p>Mit über 12 Jahren Erfahrung als Personaldienstleister im europäischen Markt haben wir uns auf diese Fachbereiche spezialisiert. Dank unseres umfangreichen Kandidatenpools finden wir für Sie schnell die passenden Fachkräfte - qualifiziert, zuverlässig und genau auf Ihre Anforderungen abgestimmt.</p>
+      </div>
+
+      <div class="industries-grid">
+        <div class="industry-card">
+          <div class="default-content">
+            <div class="card-icon">☀️</div>
+            <h3>Montage von Solarpanels</h3>
+            <p>Unsere Spezialisten für Solartechnik sorgen für die fachgerechte Montage, Installation und Wartung von Solarpanelen.</p>
+          </div>
+          <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')">
+            <div class="hover-inner">
+              <h3>Montage von Solarpanels</h3>
+              <p>Professionelle Montageteams mit Zertifizierungen für alle gängigen PV-Systeme. Schnelle Verfügbarkeit bundesweit.</p>
+              <a href="#" class="learn-more-btn">Angebot anfordern</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="industry-card">
+          <div class="default-content">
+            <div class="card-icon">🏗️</div>
+            <h3>Bauarbeiter</h3>
+            <p>Wir vermitteln qualifizierte Bauarbeiter für alle Phasen Ihres Bauprojekts – vom Rohbau bis zum Innenausbau.</p>
+          </div>
+          <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')">
+            <div class="hover-inner">
+              <h3>Bauarbeiter</h3>
+              <p>Erfahrene Teams für Hochbau, Tiefbau und Sanierung. Inklusive Maschinenführer und Gerüstbauer.</p>
+              <a href="#" class="learn-more-btn">Angebot anfordern</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="industry-card">
+          <div class="default-content">
+            <div class="card-icon">🔥</div>
+            <h3>Schweißer</h3>
+            <p>Unsere Schweißer sind Profis mit Erfahrung – vom dünnen Blech bis zum schweren Stahlträger.</p>
+          </div>
+          <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1581093450021-4a7360e9a7b8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')">
+            <div class="hover-inner">
+              <h3>Schweißer</h3>
+              <p>Zertifizierte Fachkräfte für WIG, MAG, E-Hand und mehr. Mit eigenem Equipment und Sicherheitstraining.</p>
+              <a href="#" class="learn-more-btn">Angebot anfordern</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="industry-card">
+          <div class="default-content">
+            <div class="card-icon">🔧</div>
+            <h3>Monteure</h3>
+            <p>Unsere Monteure sind mehr als nur Handwerker. Sie kennen sich mit Mechanik, Elektrik und Hydraulik aus.</p>
+          </div>
+          <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')">
+            <div class="hover-inner">
+              <h3>Monteure</h3>
+              <p>Für Maschinenmontage, Anlagenbau und Inbetriebnahme. Mit Erfahrung in verschiedenen Branchen.</p>
+              <a href="#" class="learn-more-btn">Angebot anfordern</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="industry-card">
+          <div class="default-content">
+            <div class="card-icon">⚙️</div>
+            <h3>Schlosser</h3>
+            <p>Unsere Schlosser übernehmen Schweiß-, Schnitt- und Montagearbeiten direkt am Material.</p>
+          </div>
+          <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1581093057305-2551ae5c2c3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')">
+            <div class="hover-inner">
+              <h3>Schlosser</h3>
+              <p>Präzisionsarbeit nach Zeichnung. Für Industrie, Handwerk und Sonderanfertigungen.</p>
+              <a href="#" class="learn-more-btn">Angebot anfordern</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="industry-card">
+          <div class="default-content">
+            <div class="card-icon">⚡</div>
+            <h3>Elektriker</h3>
+            <p>Unsere erfahrenen Elektriker übernehmen sämtliche Aufgaben im Bereich Elektroinstallation.</p>
+          </div>
+          <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1581094271901-8022df4466f9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')">
+            <div class="hover-inner">
+              <h3>Elektriker</h3>
+              <p>Für Hausinstallation, Industrieanlagen und spezielle Anforderungen. Mit allen notwendigen Zertifikaten.</p>
+              <a href="#" class="learn-more-btn">Angebot anfordern</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="industry-card">
+          <div class="default-content">
+            <div class="card-icon">🔩</div>
+            <h3>Werkzeugmechaniker</h3>
+            <p>Unsere Werkzeugmechaniker und Zerspaner arbeiten millimetergenau.</p>
+          </div>
+          <div class="hover-content" style="background-image: url('https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')">
+            <div class="hover-inner">
+              <h3>Werkzeugmechaniker</h3>
+              <p>Für CNC-Drehen, Fräsen und Sonderanfertigungen. Mit Erfahrung in verschiedenen Materialien.</p>
+              <a href="#" class="learn-more-btn">Angebot anfordern</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="kontakt-section">
+      <div class="kontakt-container">
+        <div class="standort-info">
+          <h3><span class="standort-icon">🏢</span> Hauptsitz</h3>
+          <p class="subtitle">
+            Wir sind stolz auf die Eröffnung unserer neuen Büros, die es uns ermöglichen, noch effizienter mit unseren Kunden zu kommunizieren und personalisierte Dienstleistungen anzubieten. <br>
+            <span class="standort-mission">
+              Mit einer modernen Infrastruktur sind wir bereit, auf die aktuellen Marktbedürfnisse zu reagieren und maßgeschneiderte Lösungen für jeden Kunden zu liefern.
+            </span>
+          </p>
+          <hr class="info-divider"/>
+          <div class="address-block">
+            <span class="address-icon">📍</span>
+            <span>Pribinovo námestie 2, 971 01 Prievidza, Slowakei</span>
+          </div>
+          <div class="map-block">
+            <iframe src="https://www.google.com/maps?q=Pribinovo+námestie+2,+971+01+Prievidza,+Slowakei&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+          <div class="contact-details">
+            <div><span class="contact-icon">✉️</span> <b>E-Mail:</b> <a href="mailto:info@partners-ml.de">info@partners-ml.de</a></div>
+            <div><span class="contact-icon">📞</span> <b>HOTLINE:</b> <a href="tel:+421944415703">+421 (0)944 415 703</a></div>
+          </div>
+        </div>
+
+        <div class="kontakt-form-card">
+          <h4 class="form-title"><span class="form-icon">💬</span> Kostenlose Beratung</h4>
+          <div class="form-subtitle">Fordern Sie ein unverbindliches Angebot an.<br>
+          <span style="font-size:0.93em; color:#607d8b;">Vertraulich & DSGVO-konform</span></div>
+          <form class="kontakt-form" action="#" method="POST">
+            <input type="text" name="firma" placeholder="Firma" required />
+            <input type="tel" name="telefonnummer" placeholder="Telefonnummer" required />
+            <input type="email" name="email" placeholder="E-Mail Adresse" required />
+            <input type="text" name="betreff" placeholder="Betreff" required />
+            <textarea name="nachricht" placeholder="Nachricht" rows="4" required></textarea>
+            <button class="cta-button" type="submit">KONTAKTIEREN SIE UNS</button>
+          </form>
+          <div class="form-hint">Wir melden uns innerhalb von 24 Stunden!</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h3 class="footer-title">FOLGEN SIE UNS</h3>
+        <span class="footer-subtitle">SOZIALE MEDIEN</span>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/profile.php?id=61564086384530" target="_blank" class="footer-social-link" title="Facebook" aria-label="Folgen Sie uns auf Facebook">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#1877f3" style="vertical-align:middle;"><path d="M22.675 0h-21.35C.596 0 0 .592 0 1.326v21.348C0 23.408.596 24 1.325 24h11.495v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24h-1.917c-1.504 0-1.797.715-1.797 1.763v2.314h3.587l-.467 3.622h-3.12V24h6.116C23.406 24 24 23.408 24 22.674V1.326C24 .592 23.406 0 22.675 0"/></svg>
+            <span>Facebook</span>
+          </a>
+          <a href="https://x.com/PartnersML" target="_blank" class="footer-social-link" title="X" aria-label="Folgen Sie uns auf X">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#cfd8dc" style="vertical-align:middle;"><path d="M13.983 10.192 21.543 2h-1.589l-6.479 6.935L7.144 2H2.359l8.022 11.525L2.242 22h1.59l6.884-7.364 4.107 7.364h4.785zm-2.176 2.329-.798-1.16L4.1 3.17h2.528l5.6 8.143.799 1.16 6.984 10.13h-2.528z"></path></svg>
+            <span>X</span>
+          </a>
+          <a href="https://www.instagram.com/partners_ml/" target="_blank" class="footer-social-link" title="Instagram" aria-label="Folgen Sie uns auf Instagram">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="url(#ig-gradient)" style="vertical-align:middle;">
+              <defs>
+                <linearGradient id="ig-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#f58529"/>
+                  <stop offset="40%" stop-color="#dd2a7b"/>
+                  <stop offset="100%" stop-color="#515bd4"/>
+                </linearGradient>
+              </defs>
+              <path d="M7.75 2A5.75 5.75 0 0 0 2 7.75v8.5A5.75 5.75 0 0 0 7.75 22h8.5A5.75 5.75 0 0 0 22 16.25v-8.5A5.75 5.75 0 0 0 16.25 2zm0 1.5h8.5A4.25 4.25 0 0 1 20.5 7.75v8.5A4.25 4.25 0 0 1 16.25 20.5h-8.5A4.25 4.25 0 0 1 3.5 16.25v-8.5A4.25 4.25 0 0 1 7.75 3.5zm8.75 2a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5zM12 6.5A5.5 5.5 0 1 0 17.5 12 5.5 5.5 0 0 0 12 6.5zm0 1.5A4 4 0 1 1 8 12a4 4 0 0 1 4-4z"/>
+            </svg>
+            <span>Instagram</span>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-title">RECHTLICHES</h3>
+        <ul class="footer-links">
+          <li><a href="https://partners-ml.de/privacy-policy/">DATENSCHUTZERKLÄRUNG</a></li>
+          <li><a href="https://partners-ml.de/agb/">AGB</a></li>
+          <li><a href="https://partners-ml.de/impressum/">IMPRESSUM</a></li>
+          <li><a href="https://partners-ml.de/cookie-richtlinie-eu/">COOKIE-RICHTLINIE (EU)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>Copyright © <script>document.write(new Date().getFullYear())</script> partners-ml.de</span>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainNav = document.querySelector('#main-nav');
+    if (menuToggle && mainNav) {
+      menuToggle.addEventListener('click', () => {
+        document.body.classList.toggle('nav-open');
+        const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', String(!isExpanded));
+      });
+    }
+    // Close submenus on outside click
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-item')) {
+        document.querySelectorAll('.submenu').forEach(sub => { sub.style.display = 'none'; });
+      }
+    });
+  </script>
+</body>
+</html>
